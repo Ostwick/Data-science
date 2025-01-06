@@ -1,6 +1,6 @@
 # Repositório de Ferramentas de Ciência de Dados
 
-Bem-vindo ao repositório de ferramentas de ciência de dados! Este repositório é uma coleção de códigos e scripts desenvolvidos para resolver desafios comuns em projetos de ciência de dados e engenharia de dados. O objetivo é fornecer soluções modulares, reutilizáveis e fáceis de implementar.
+Bem-vindo ao repositório de ferramentas de ciência de dados! Este repositório é uma coleção de códigos e scripts desenvolvidos para resolver desafios comuns em projetos de ciência de dados e engenharia de dados. O objetivo é fornecer soluções modulares, reutilizáveis e fáceis de implementar, além de ajudar a engajar e desenvolver minha estagiária.
 
 ## Estrutura do Repositório
 
