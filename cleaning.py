@@ -12,11 +12,11 @@ logging.basicConfig(
 
 # Database configuration
 db_config = {
-    'user': 'usuario',
-    'password': 'senha',
-    'host': 'endereco',
+    'user': 'user',
+    'password': 'password',
+    'host': 'address',
     'port': 9999,
-    'database': 'base'
+    'database': 'dbase'
 }
 
 def fetch_data_from_db(query):
