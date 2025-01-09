@@ -32,7 +32,7 @@ Below is a list of the planned codes for this repository:
 ## How to Use
 
 ### 1. Automated Data Cleaning Pipeline
-The file `limpeza.py` contains the first code of this repository:
+The file `cleaning.py` contains the first code of this repository:
 
 - **Features:**  
   - Handles missing values using strategies such as mean, median, mode, or row exclusion.
@@ -42,8 +42,8 @@ The file `limpeza.py` contains the first code of this repository:
 
 - **How to Run:**
   1. Configure the database credentials in the `db_config` dictionary.
-  2. Run the `limpeza.py` file with Python.
-  3. The script fetches data from the `historico` table, processes it, and saves the results in the `historico_limpo` table.
+  2. Run the `cleaning.py` file with Python.
+  3. The script fetches data from the `data` table, processes it, and saves the results in the `data_clean` table.
 
 ---
 
