@@ -3,14 +3,14 @@ import numpy as np
 import logging
 import mysql.connector
 
-# Configurar o logger para registrar ações e erros
+# Logger configuration
 logging.basicConfig(
     filename='data_cleaning.log', 
     level=logging.INFO, 
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-# Configuração do banco de dados
+# Database configuration
 db_config = {
     'user': 'usuario',
     'password': 'senha',
@@ -21,31 +21,33 @@ db_config = {
 
 def fetch_data_from_db(query):
     """
-    Busca dados do banco de dados MySQL com base em uma consulta SQL.
+    Fetches data from the MySQL database based on an SQL query.
 
     Args:
-        query (str): Consulta SQL para buscar os dados.
+        query (str): Query to fetch the data.
 
     Returns:
-        pd.DataFrame: Dados retornados em formato de DataFrame.
+        pd.DataFrame: Data returned in DataFrame format.
+
+.
     """
     try:
         conn = mysql.connector.connect(**db_config)
         df = pd.read_sql(query, conn)
         conn.close()
-        logging.info("Dados buscados com sucesso do banco de dados.")
+        logging.info("Data successfully fetched from database")
         return df
     except Exception as e:
-        logging.error(f"Erro ao buscar dados do banco de dados: {e}")
+        logging.error(f"Error fetching data from database: {e}")
         raise
 
 def save_data_to_db(df, table_name):
     """
-    Salva os dados processados de volta no banco de dados.
+    Saves the processed data back to the database.
 
     Args:
-        df (pd.DataFrame): DataFrame a ser salvo.
-        table_name (str): Nome da tabela no banco de dados.
+        df (pd.DataFrame): DataFrame to be saved.
+        table_name (str): Name of the table in the database.
 
     Returns:
         None
@@ -54,7 +56,7 @@ def save_data_to_db(df, table_name):
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
 
-        # Criar instruções SQL para inserir os dados
+        # Create SQL statements to insert data
         for _, row in df.iterrows():
             placeholders = ', '.join(['%s'] * len(row))
             columns = ', '.join(row.index)
@@ -63,22 +65,22 @@ def save_data_to_db(df, table_name):
 
         conn.commit()
         conn.close()
-        logging.info(f"Dados salvos com sucesso na tabela {table_name}.")
+        logging.info(f"Data successfully saved in table {table_name}.")
     except Exception as e:
-        logging.error(f"Erro ao salvar dados no banco de dados: {e}")
+        logging.error(f"Error saving data to database: {e}")
         raise
 
 def handle_missing_values(df, strategy='mean', columns=None):
     """
-    Trata valores ausentes em um DataFrame.
+    Handles missing values ​​in a DataFrame.
 
     Args:
-        df (pd.DataFrame): DataFrame a ser processado.
-        strategy (str): Estratégia para lidar com valores ausentes ('mean', 'median', 'mode', 'drop').
-        columns (list): Lista de colunas para aplicar o tratamento (se None, aplica a todas as colunas).
+        df (pd.DataFrame): DataFrame to be processed.
+        strategy (str): Strategy for dealing with missing values ('mean', 'median', 'mode', 'drop').
+        columns (list): List of columns to apply the treatment  (se None, aplica a todas as colunas).
 
     Returns:
-        pd.DataFrame: DataFrame com valores ausentes tratados.
+        pd.DataFrame: DataFrame with missing values ​​handled.
     """
     try:
         if columns is None:
@@ -98,24 +100,24 @@ def handle_missing_values(df, strategy='mean', columns=None):
         elif strategy == 'drop':
             df.dropna(subset=columns, inplace=True)
         else:
-            logging.error(f"Estratégia desconhecida: {strategy}")
+            logging.error(f"Unknown strategy: {strategy}")
 
-        logging.info(f"Valores ausentes tratados usando a estratégia: {strategy}")
+        logging.info(f"Missing values ​​handled using the strategy: {strategy}")
         return df
     except Exception as e:
-        logging.error(f"Erro ao lidar com valores ausentes: {e}")
+        logging.error(f"Error handling missing values: {e}")
         raise
 
 def format_data(df, columns_format):
     """
-    Formata dados em colunas específicas de acordo com os formatos fornecidos.
+    Formats data in specific columns according to the provided formats.
 
     Args:
-        df (pd.DataFrame): DataFrame a ser processado.
-        columns_format (dict): Dicionário onde a chave é o nome da coluna e o valor é o tipo desejado ('datetime', 'str', etc.).
+        df (pd.DataFrame): DataFrame to be processed.
+        columns_format (dict): Dictionary where the key is the column name and the value is the desired type ('datetime', 'str', etc.).
 
     Returns:
-        pd.DataFrame: DataFrame com dados formatados.
+        pd.DataFrame: DataFrame with formatted data.
     """
     try:
         for column, fmt in columns_format.items():
@@ -128,26 +130,26 @@ def format_data(df, columns_format):
             elif fmt == 'int':
                 df[column] = pd.to_numeric(df[column], errors='coerce', downcast='integer')
             else:
-                logging.warning(f"Formato desconhecido: {fmt} para coluna: {column}")
+                logging.warning(f"Unknown format: {fmt} for column: {column}")
 
-        logging.info("Dados formatados com sucesso.")
+        logging.info("Data formatted successfully.")
         return df
     except Exception as e:
-        logging.error(f"Erro ao formatar dados: {e}")
+        logging.error(f"Error formatting data: {e}")
         raise
 
 def detect_outliers(df, columns, method='zscore', threshold=3):
     """
-    Detecta e remove outliers de colunas numéricas.
+    Detects and removes outliers from numeric columns.
 
     Args:
-        df (pd.DataFrame): DataFrame a ser processado.
-        columns (list): Lista de colunas para verificar outliers.
-        method (str): Método para detectar outliers ('zscore' ou 'iqr').
-        threshold (float): Limite para identificar outliers.
+        df (pd.DataFrame): DataFrame to be processed.
+        columns (list): List of columns to check for outliers.
+        method (str): MMethod to detect outliers ('zscore' ou 'iqr').
+        threshold (float): Limit to identify outliers.
 
     Returns:
-        pd.DataFrame: DataFrame com outliers removidos.
+        pd.DataFrame: DataFrame with outliers removed.
     """
     try:
         if method == 'zscore':
@@ -161,54 +163,54 @@ def detect_outliers(df, columns, method='zscore', threshold=3):
                 IQR = Q3 - Q1
                 df = df[(df[col] >= Q1 - 1.5 * IQR) & (df[col] <= Q3 + 1.5 * IQR)]
         else:
-            logging.warning(f"Método desconhecido para detectar outliers: {method}")
+            logging.warning(f"Unknown method to detect outliers: {method}")
 
-        logging.info("Outliers detectados e removidos com sucesso.")
+        logging.info("Outliers successfully detected and removed.")
         return df
     except Exception as e:
-        logging.error(f"Erro ao detectar/remover outliers: {e}")
+        logging.error(f"Error detecting/removing outliers: {e}")
         raise
 
 def clean_data_pipeline(df, missing_strategy='mean', columns_format=None, outlier_columns=None, outlier_method='zscore'):
     """
-    Pipeline principal para limpeza de dados.
+    Main pipeline for data cleaning.
 
     Args:
-        df (pd.DataFrame): DataFrame a ser limpo.
-        missing_strategy (str): Estratégia para lidar com valores ausentes.
-        columns_format (dict): Dicionário de formatações para colunas.
-        outlier_columns (list): Lista de colunas para verificar outliers.
-        outlier_method (str): Método para detectar outliers ('zscore' ou 'iqr').
+        df (pd.DataFrame): DataFrame to be cleaned.
+        missing_strategy (str): Strategy for dealing with missing values.
+        columns_format (dict): Dictionary of column formatting.
+        outlier_columns (list): List of columns to check for outliers.
+        outlier_method (str): Method to detect outliers  ('zscore' ou 'iqr').
 
     Returns:
-        pd.DataFrame: DataFrame limpo.
+        pd.DataFrame: Clean DataFrame.
     """
     try:
-        # Tratamento de valores ausentes
+        # Handling missing values
         df = handle_missing_values(df, strategy=missing_strategy)
 
-        # Formatação de dados
+        # Data formatting
         if columns_format:
             df = format_data(df, columns_format)
 
-        # Detecção e remoção de outliers
+        # Outlier detection and removal
         if outlier_columns:
             df = detect_outliers(df, outlier_columns, method=outlier_method)
 
-        logging.info("Pipeline de limpeza de dados concluído com sucesso.")
+        logging.info("Data cleansing pipeline completed successfully.")
         return df
     except Exception as e:
-        logging.error(f"Erro na pipeline de limpeza de dados: {e}")
+        logging.error(f"Error in data cleaning pipeline: {e}")
         raise
 
-# Exemplo de uso
+# Example
 if __name__ == "__main__":
     query = "SELECT * FROM historico" #Tabela que uso no trabalho
     
-    # Buscar dados do banco de dados
+    # Fetch data from database
     df = fetch_data_from_db(query)
 
-    # Processar os dados
+    # Process the data
     cleaned_df = clean_data_pipeline(
         df,
         missing_strategy='mean',
@@ -217,5 +219,5 @@ if __name__ == "__main__":
         outlier_method='zscore'
     )
 
-    # Salvar os dados limpos de volta no banco de dados
+    # Save the cleaned data back to the database
     save_data_to_db(cleaned_df, 'historico_limpo')
