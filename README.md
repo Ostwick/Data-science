@@ -47,41 +47,39 @@ The file `cleaning.py` contains the first code of this repository:
 
 ---
 
-2. Simple ETL (Extract, Transform, Load) Pipeline
+### 2. Simple ETL (Extract, Transform, Load) Pipeline
 
 The file etl_pipeline.py contains the script for the Simple ETL pipeline:
 
-    Features:
-        Extracts data from a source database using a SQL query.
-        Transforms the data by cleaning and formatting it (e.g., dropping rows with missing values, renaming columns).
-        Loads the transformed data into a destination database table.
+- **Features:**
+  - Extracts data from a source database using a SQL query.
+  - Transforms the data by cleaning and formatting it (e.g., dropping rows with missing values, renaming columns).
+  - Loads the transformed data into a destination database table.
 
-    How to Run:
-        Set Up Database Configurations:
-            Update the source and destination database credentials in the db_config_source and db_config_destination dictionaries within the script. Ensure the user, password, host, port, and database fields are correct.
-        Define the Query for Data Extraction:
-            Modify the query variable in the etl_process() function to select the data you want to extract from the source database. For example:
+- **How to Run:**   
+  1. Set Up Database Configurations:
+    Update the source and destination database credentials in the db_config_source and db_config_destination dictionaries within the script. Ensure the user, password, host, port, and database fields are correct.
+  2. Define the Query for Data Extraction:
+    Modify the query variable in the etl_process() function to select the data you want to extract from the source database. For example:
 
-    query = "SELECT id, name, age, created_at FROM users"
+            query = "SELECT id, name, age, created_at FROM users"
 
-Update the Destination Table:
-
+  3. Update the Destination Table:
     Set the destination_table variable in the load_data function to the table name where the transformed data will be inserted in the destination database.
 
-Run the Script:
-
+  4. Run the Script:
     Execute the script by running:
 
             python etl_pipeline.py
 
-        Verify the Results:
-            After the script completes, check the destination database to ensure the data has been loaded correctly.
+  5. Verify the Results:
+    After the script completes, check the destination database to ensure the data has been loaded correctly.
 
-    Example Use Case:
+- **Example Use Case:**   
     Suppose you want to migrate user data from a legacy database (source_db) to a new analytics database (destination_db):
-        Extract user data with fields like id, name, age, and created_at.
-        Clean the data by removing rows with null values and renaming columns to a standardized format (e.g., lowercase).
-        Load the clean data into the analytics_users table in the destination database.
+  1. Extract user data with fields like id, name, age, and created_at.
+  2. Clean the data by removing rows with null values and renaming columns to a standardized format (e.g., lowercase).
+  3. Load the clean data into the analytics_users table in the destination database.
 
 This process simplifies data migration while ensuring the quality of data being transferred.
 
